@@ -32,12 +32,21 @@ def extract_game_details_from_table_elements(table_elements):
 
     for tr_element in table_body_element.xpath('tr'):
       td_elements = tr_element.xpath('td')
-      date_str, time_str, home_team, away_team, field = map(get_text_singleton_of_element, td_elements)
 
-      # The separator rows in the table have no text nodes (datestr is None).
-      if date_str is not None:
-        games_by_team[home_team].append([date_str, time_str, home_team, away_team, is_bad_weather_event, field])
-        games_by_team[away_team].append([date_str, time_str, home_team, away_team, is_bad_weather_event, field])
+      texts = list(map(get_text_singleton_of_element, td_elements))
+
+      if len(texts) == 1:
+        # exceptional row introduced ca. Sept. 11
+        [text] = texts
+        assert text == 'Oct. 12 - Foothills Community Park is closed - Please view the '
+
+      else:
+        date_str, time_str, home_team, away_team, field = map(get_text_singleton_of_element, td_elements)
+  
+        # The separator rows in the table have no text nodes (datestr is None).
+        if date_str is not None:
+          games_by_team[home_team].append([date_str, time_str, home_team, away_team, is_bad_weather_event, field])
+          games_by_team[away_team].append([date_str, time_str, home_team, away_team, is_bad_weather_event, field])
 
   return games_by_team
 
