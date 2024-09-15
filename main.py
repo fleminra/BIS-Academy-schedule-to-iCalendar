@@ -80,7 +80,10 @@ def make_icalendar_for_team(team_name, games_by_team, url, tz_name):
     }[team_name]
 
     event.add('description', f'''field: {field}
-jersey: {jersey_color}''')
+    
+jersey: {jersey_color}
+
+Always confirm at {url} !''')
   
     cal.add_component(event)
 
